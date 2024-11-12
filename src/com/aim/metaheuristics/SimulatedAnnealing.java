@@ -70,6 +70,7 @@ public class SimulatedAnnealing {
                         bestX = currentX;
                         bestY = currentY;
                         metrics.setBestIterationNumber(iteration);
+                        metrics.incrementBestSolutionImprovements(); // Increment improvement count
                     }
                 } else {
                     metrics.addFunctionValueChange(0.0);

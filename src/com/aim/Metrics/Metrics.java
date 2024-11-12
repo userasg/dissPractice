@@ -17,6 +17,13 @@ public class Metrics {
     private int[] bestSolution;
     private double bestValue;
 
+    private int bestSolutionImprovements = 0;
+
+    private double averageMoveDistance;
+    private double standardDeviationObjective;
+    private double acceptanceRate;
+    private double totalFunctionValueChange;
+
     // New metrics
     private double totalDeviationFromOptimum;
     private double totalDistanceTraveled;
@@ -143,6 +150,43 @@ public class Metrics {
         }
     }
 
+    // Method to calculate standard deviation of objective values
+    public double getStandardDeviationObjective() {
+        if (objectiveValues.isEmpty()) return 0.0;
+        double mean = objectiveValues.stream().mapToDouble(val -> val).average().orElse(0.0);
+        double variance = objectiveValues.stream().mapToDouble(val -> Math.pow(val - mean, 2)).average().orElse(0.0);
+        return Math.sqrt(variance);
+    }
+
+    // Method to calculate acceptance rate
+    public double getAcceptanceRate() {
+        int totalMoves = totalAcceptedMoves + totalRejectedMoves;
+        return totalMoves > 0 ? (double) totalAcceptedMoves / totalMoves : 0.0;
+    }
+
+    // Method to calculate average move distance
+    public double getAverageMoveDistance() {
+        return totalAcceptedMoves > 0 ? totalDistanceTraveled / totalAcceptedMoves : 0.0;
+    }
+
+    public void incrementBestSolutionImprovements() {
+        bestSolutionImprovements++;
+    }
+
+    public int getBestSolutionImprovements() {
+        return bestSolutionImprovements;
+    }
+
+    // Method to get total function value change
+    public double getTotalFunctionValueChange() {
+        return functionValueChanges.stream().mapToDouble(Math::abs).sum();
+    }
+
+    // Method to calculate exploration-exploitation ratio
+    public double getExplorationExploitationRatio() {
+        return getAcceptanceRate() > 0 ? getAverageMoveDistance() / getAcceptanceRate() : 0.0;
+    }
+
     // Override toString to include new metrics
     @Override
     public String toString() {
@@ -156,6 +200,13 @@ public class Metrics {
         sb.append("Total Deviation from Optimum: ").append(totalDeviationFromOptimum).append("\n");
         sb.append("Distinct Positions Visited: ").append(getDistinctPositionsCount()).append("\n");
         sb.append("End-to-End Distance: ").append(endToEndDistance).append("\n");
+        sb.append("Average Move Distance: ").append(getAverageMoveDistance()).append("\n");
+        sb.append("Standard Deviation of Objective Values: ").append(getStandardDeviationObjective()).append("\n");
+        sb.append("Acceptance Rate: ").append(getAcceptanceRate()).append("\n");
+        sb.append("Best Solution Improvements: ").append(bestSolutionImprovements).append("\n");
+        sb.append("Total Function Value Change: ").append(getTotalFunctionValueChange()).append("\n");
+        sb.append("Exploration-Exploitation Ratio: ").append(getExplorationExploitationRatio()).append("\n");
         return sb.toString();
     }
+
 }

@@ -14,7 +14,7 @@ public class Runner {
         SpecificProblem problem = new SpecificProblem();
         double globalOptimum = problem.getGlobalOptimum(); // Should be 0.0
 
-        int numRuns = 10; // Number of runs (can increase as needed)
+        int numRuns = 30; // Number of runs (can increase as needed)
         List<Metrics> allMetrics = new ArrayList<>();
 
         for (int run = 0; run < numRuns; run++) {
@@ -39,14 +39,20 @@ public class Runner {
     private static void exportMetricsToCSV(List<Metrics> metricsList, String fileName) {
         try (java.io.FileWriter writer = new java.io.FileWriter(fileName)) {
             writer.write("Run,Best Value,Best Iteration,Total Accepted Moves,Total Rejected Moves,Total Distance Traveled," +
-                    "Total Deviation from Optimum,Distinct Positions Visited,End-to-End Distance\n");
-            int runNumber = 1;
+                    "Total Deviation from Optimum,Distinct Positions Visited,End-to-End Distance,Average Move Distance," +
+                    "Standard Deviation Objective,Acceptance Rate,Best Solution Improvements,Total Function Value Change," +
+                    "Exploration-Exploitation Ratio\n");
+            int runNumber=1;
             for (Metrics metrics : metricsList) {
                 writer.write(runNumber++ + "," + metrics.getBestValue() + "," + metrics.getBestIterationNumber() + "," +
                         metrics.getTotalAcceptedMoves() + "," + metrics.getTotalRejectedMoves() + "," +
                         metrics.getTotalDistanceTraveled() + "," + metrics.getTotalDeviationFromOptimum() + "," +
-                        metrics.getDistinctPositionsCount() + "," + metrics.getEndToEndDistance() + "\n");
+                        metrics.getDistinctPositionsCount() + "," + metrics.getEndToEndDistance() + "," +
+                        metrics.getAverageMoveDistance() + "," + metrics.getStandardDeviationObjective() + "," +
+                        metrics.getAcceptanceRate() + "," + metrics.getBestSolutionImprovements() + "," +
+                        metrics.getTotalFunctionValueChange() + "," + metrics.getExplorationExploitationRatio() + "\n");
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
