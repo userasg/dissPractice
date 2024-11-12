@@ -110,20 +110,8 @@ public class Metrics {
         return objectiveValues;
     }
 
-    public List<Double> getFunctionValueChanges() {
-        return functionValueChanges;
-    }
-
-    public List<Double> getDistances() {
-        return distances;
-    }
-
-    public List<Double> getDeviationsFromOptimum() {
-        return deviationsFromOptimum;
-    }
-
-    public List<Integer> getAcceptedMoves() {
-        return acceptedMoves;
+    public int getDistinctPositionsCount() {
+        return distinctPositions.size();
     }
 
     // New metric methods
@@ -141,10 +129,6 @@ public class Metrics {
 
     public int getTotalRejectedMoves() {
         return totalRejectedMoves;
-    }
-
-    public int getDistinctPositionsCount() {
-        return distinctPositions.size();
     }
 
     public double getEndToEndDistance() {

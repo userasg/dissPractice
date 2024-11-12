@@ -49,8 +49,8 @@ public class SimulatedAnnealing {
 
                 int deltaX = random.nextInt(3) - 1;
                 int deltaY = random.nextInt(3) - 1;
-                currentX = problem.clamp(currentX + deltaX, -5, 5);
-                currentY = problem.clamp(currentY + deltaY, -5, 5);
+                currentX = problem.clamp(currentX + deltaX, -20, 20);
+                currentY = problem.clamp(currentY + deltaY, -20, 20);
 
                 double newScore = problem.evaluate(currentX, currentY);
                 double delta = newScore - oldScore;
