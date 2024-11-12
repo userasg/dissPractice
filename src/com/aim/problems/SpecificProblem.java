@@ -8,12 +8,12 @@ public class SpecificProblem extends GeneralProblem {
         return Math.pow(x - 1, 2) + Math.pow(y + 2, 2);
     }
 
-    // Method to get the global optimum value
+    @Override
     public double getGlobalOptimum() {
         return 0.0;
     }
 
-    // Method to get the global optimum point
+    @Override
     public int[] getGlobalOptimumPoint() {
         return new int[]{1, -2};
     }

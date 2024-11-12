@@ -38,10 +38,10 @@ public class SimulatedAnnealing {
         metrics.addDeviationFromOptimum(Math.abs(currentScore - globalOptimumValue));
         metrics.addAcceptedMove(true);
 
-        int iteration = 0; // Total iteration count
+        int iteration = 0;
 
-        while (temperature > 0.001) {
-            for (int i = 0; i < maxIters; i++) {
+        while (temperature > 0.001 && iteration < maxIters) {
+            for (int i = 0; i < maxIters && iteration < maxIters; i++) {
                 iteration++;
                 int oldX = currentX;
                 int oldY = currentY;
@@ -49,8 +49,8 @@ public class SimulatedAnnealing {
 
                 int deltaX = random.nextInt(3) - 1;
                 int deltaY = random.nextInt(3) - 1;
-                currentX = problem.clamp(currentX + deltaX, -20, 20);
-                currentY = problem.clamp(currentY + deltaY, -20, 20);
+                currentX = problem.clamp(currentX + deltaX, -50, 50);
+                currentY = problem.clamp(currentY + deltaY, -50, 50);
 
                 double newScore = problem.evaluate(currentX, currentY);
                 double delta = newScore - oldScore;
@@ -70,7 +70,7 @@ public class SimulatedAnnealing {
                         bestX = currentX;
                         bestY = currentY;
                         metrics.setBestIterationNumber(iteration);
-                        metrics.incrementBestSolutionImprovements(); // Increment improvement count
+                        metrics.incrementBestSolutionImprovements();
                     }
                 } else {
                     metrics.addFunctionValueChange(0.0);
