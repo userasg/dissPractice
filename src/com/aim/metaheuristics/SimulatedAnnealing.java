@@ -65,11 +65,12 @@ public class SimulatedAnnealing {
                     metrics.addDeviationFromOptimum(Math.abs(currentScore - globalOptimumValue));
                     metrics.addAcceptedMove(true);
 
+                    // Update the best value and iteration if a better solution is found
                     if (newScore < bestValue) {
                         bestValue = newScore;
                         bestX = currentX;
                         bestY = currentY;
-                        metrics.setBestIterationNumber(iteration);
+                        metrics.setBestIterationNumber(iteration); // Update the iteration here
                         metrics.incrementBestSolutionImprovements();
                     }
                 } else {
@@ -82,14 +83,20 @@ public class SimulatedAnnealing {
                 }
 
                 metrics.addObjectiveValue(currentScore);
-                if (currentScore == globalOptimumValue) break;
             }
+
             coolingSchedule.advanceTemperature();
             temperature = coolingSchedule.getCurrentTemperature();
         }
 
         metrics.setBestSolution(bestX, bestY);
         metrics.setBestValue(bestValue);
+
+        // Ensure Best Iteration is set to the final best iteration found
+        if (metrics.getBestIterationNumber() == -1) {
+            metrics.setBestIterationNumber(0); // Default to 0th iteration if no improvement
+        }
+
         return metrics;
     }
 }

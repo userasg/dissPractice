@@ -30,7 +30,7 @@ public class Runner {
 
         double globalOptimum = problem.getGlobalOptimum();
         int numRuns = 50; // Number of runs for each maxIters setting
-        int[] maxItersArray = {50, 500, 5000}; // Different maxIters settings
+        int[] maxItersArray = {10, 100, 1000}; // Different maxIters settings
 
         Random random = new Random();
 
