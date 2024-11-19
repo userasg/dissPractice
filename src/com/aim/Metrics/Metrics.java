@@ -32,6 +32,11 @@ public class Metrics {
     private Set<String> distinctPositions;
     private double endToEndDistance;
 
+    //clupatra work
+    private final List<String> exactSequence; // Stores symbols in the exact sequence
+    private final Set<String> visitedSolutions; // Tracks visited solutions for cycle detection
+    private final List<String> compressedSequence; // Compressed version of the exact sequence
+
     public Metrics() {
         this.visitedPoints = new ArrayList<>();
         this.objectiveValues = new ArrayList<>();
@@ -41,13 +46,15 @@ public class Metrics {
         this.acceptedMoves = new ArrayList<>();
         this.bestSolution = new int[2];
         this.bestValue = Double.POSITIVE_INFINITY;
-
-        // Initialize new metrics
         this.totalDeviationFromOptimum = 0.0;
         this.totalDistanceTraveled = 0.0;
         this.totalAcceptedMoves = 0;
         this.totalRejectedMoves = 0;
         this.distinctPositions = new HashSet<>();
+        //clupatra work
+        this.exactSequence = new ArrayList<>();
+        this.visitedSolutions = new HashSet<>();
+        this.compressedSequence = new ArrayList<>();
     }
 
     public void addVisitedPoint(int x, int y) {
@@ -152,9 +159,14 @@ public class Metrics {
 
     // Method to calculate standard deviation of objective values
     public double getStandardDeviationObjective() {
-        if (objectiveValues.isEmpty()) return 0.0;
+        if (objectiveValues.isEmpty()) {
+            return 0.0; // No values to calculate
+        }
         double mean = objectiveValues.stream().mapToDouble(val -> val).average().orElse(0.0);
-        double variance = objectiveValues.stream().mapToDouble(val -> Math.pow(val - mean, 2)).average().orElse(0.0);
+        double variance = objectiveValues.stream()
+                .mapToDouble(val -> Math.pow(val - mean, 2))
+                .average()
+                .orElse(0.0);
         return Math.sqrt(variance);
     }
 
@@ -185,6 +197,36 @@ public class Metrics {
     // Method to calculate exploration-exploitation ratio
     public double getExplorationExploitationRatio() {
         return getAcceptanceRate() > 0 ? getAverageMoveDistance() / getAcceptanceRate() : 0.0;
+    }
+
+    // Clupatra work
+    public void addExactSequenceSymbol(int x, int y, double deviation, String positionType) {
+        String currentSymbol = String.format("%02d%s", (int) Math.round(deviation), positionType);
+        exactSequence.add(currentSymbol);
+
+        // Check for cycles and add 'C' if a solution is revisited
+        String currentSolution = x + "," + y;
+        if (visitedSolutions.contains(currentSolution)) {
+            exactSequence.add("C");
+        } else {
+            visitedSolutions.add(currentSolution);
+        }
+    }
+
+    public void addJumpSymbol() {
+        exactSequence.add("J");
+    }
+
+    public void compressExactSequence() {
+        for (int i = 0; i < exactSequence.size(); i++) {
+            if (i == 0 || !exactSequence.get(i).equals(exactSequence.get(i - 1))) {
+                compressedSequence.add(exactSequence.get(i));
+            }
+        }
+    }
+
+    public List<String> getCompressedSequence() {
+        return compressedSequence;
     }
 
     // Override toString to include new metrics
