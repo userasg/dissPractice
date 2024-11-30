@@ -16,7 +16,7 @@ public class Runner {
     public static void main(String[] args) {
         // Choose which problem to use
         GeneralProblem problem;
-        String problemType = "complex"; // Change to "specific" or "complex"
+        String problemType = "easy"; // Change to "specific" or "complex"
 
         if (problemType.equals("specific")) {
             problem = new SpecificProblem();
@@ -32,7 +32,7 @@ public class Runner {
         }
 
         double globalOptimum = problem.getGlobalOptimum();
-        int numRuns =  100; // Number of runs for each maxIters setting
+        int numRuns =  500; // Number of runs for each maxIters setting
         int[] maxItersArray = {100,1000,10000}; // Different maxIters settings
 
         Random random = new Random();
@@ -43,7 +43,7 @@ public class Runner {
             System.out.println("Running with maxIters = " + maxIters);
 
             for (int run = 0; run < numRuns; run++) {
-                CoolingSchedule coolingSchedule = new LundyAndMees(5000.0, 0.005);
+                CoolingSchedule coolingSchedule = new LundyAndMees(5000.0, 0.05);
 
                 // Generate a random starting point within the bounds [-50, 50] for both x and y
                 int startX = random.nextInt(2001) - 1000;
@@ -58,9 +58,7 @@ public class Runner {
                 System.out.println("Exact Sequence (Compressed): " + metrics.getCompressedSequence());
                 System.out.println("Objective Values Over Time: " + metrics.getObjectiveValues());
                 System.out.println("Visited Points Over Time: ");
-                for (int[] point : metrics.getVisitedPoints()) {
-                    System.out.print("(" + point[0] + ", " + point[1] + ") ");
-                }
+
                 System.out.println("\n------------------------------------------------\n");
             }
 

@@ -4,7 +4,7 @@ import com.aim.problems.GeneralProblem;
 import com.aim.Metrics.Metrics;
 
 import java.util.Random;
-
+//class for simulated annealing
 public class SimulatedAnnealing {
 
     private final GeneralProblem problem;
@@ -12,7 +12,7 @@ public class SimulatedAnnealing {
     private final int maxIters;
     private final Random random;
     private final double globalOptimumValue;
-
+    //constructor to set the references
     public SimulatedAnnealing(GeneralProblem problem, CoolingSchedule coolingSchedule, int maxIters, double globalOptimumValue) {
         this.problem = problem;
         this.coolingSchedule = coolingSchedule;
@@ -20,7 +20,7 @@ public class SimulatedAnnealing {
         this.globalOptimumValue = globalOptimumValue;
         this.random = new Random();
     }
-
+    //run produces a metrics object from a given start x and y position in the search space
     public Metrics run(int startX, int startY) {
         double temperature = coolingSchedule.getCurrentTemperature();
         int currentX = startX;
@@ -52,7 +52,7 @@ public class SimulatedAnnealing {
                 int oldY = currentY;
                 double oldScore = currentScore;
 
-                // Generate new neighbour
+                // Generate new neighbour local search within "3 moves"
                 int deltaX = random.nextInt(3) - 1;
                 int deltaY = random.nextInt(3) - 1;
                 currentX = problem.clamp(currentX + deltaX, -1000, 1000);
@@ -61,7 +61,7 @@ public class SimulatedAnnealing {
                 double newScore = problem.evaluate(currentX, currentY);
                 double delta = newScore - oldScore;
                 double distance = Math.sqrt(Math.pow(currentX - oldX, 2) + Math.pow(currentY - oldY, 2));
-
+                //acceptance criteria
                 boolean accepted = delta < 0 || Math.exp(-delta / temperature) > random.nextDouble();
                 if (accepted) {
                     currentScore = newScore;
